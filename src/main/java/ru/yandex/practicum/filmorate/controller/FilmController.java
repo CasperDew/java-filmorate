@@ -6,8 +6,8 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -17,9 +17,9 @@ public class FilmController {
     private final Map<Integer, Film> films = new HashMap<>();
 
     @GetMapping
-    public Collection<Film> findAll() {
+    public List<Film> findAll() {
         log.info("Получен список фильмов");
-        return films.values();
+        return List.copyOf(films.values());
     }
 
     @PostMapping
