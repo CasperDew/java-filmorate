@@ -2,61 +2,70 @@ package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final Map<Integer, User> users = new HashMap<>();
+    private final UserService userService;
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public List<User> findAll() {
         log.info("Получен список пользователей");
-        return List.copyOf(users.values());
+        return userService.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable Long id) {
+        log.info("Получен пользователь с id: {}", id);
+        return userService.getUserById(id);
+    }
+
+    @GetMapping("/{id}/friends")
+    public List<User> getFriends(@PathVariable Long id) {
+        log.info("Получен список друзей пользователя с ID: {}", id);
+        return userService.getFriends(id);
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public List<User> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
+        log.info("Получен список общих друзей пользователя {} и пользователя {}", id, otherId);
+        return userService.getCommonFriends(id, otherId);
     }
 
     @PostMapping
     public User create(@Valid @RequestBody User user) {
-        validateUsers(user);
-        user.setId(getNextId());
         log.info("Добавлен пользователь: {}", user);
-        users.put(user.getId(), user);
-        return user;
+        return userService.create(user);
     }
 
     @PutMapping
     public User updateUser(@Valid @RequestBody User user) {
-        if (!users.containsKey(user.getId())) {
-            throw new ValidationException("Пользователь с указанным id не найден");
-        }
-        validateUsers(user);
-        users.put(user.getId(), user);
         log.info("Обновлен пользователь: {}", user);
-        return user;
+        return userService.update(user);
     }
 
-    // вспомогательный метод для генерации идентификатора нового поста
-    private int getNextId() {
-        int currentMaxId = users.keySet()
-                .stream()
-                .mapToInt(id -> id)
-                .max()
-                .orElse(0);
-        return ++currentMaxId;
+    @PutMapping("/{id}/friends/{friendId}")
+    public void addFriends(@PathVariable Long id, @PathVariable Long friendId) {
+        log.info("Пользователь {} добавляет в друзья пользователя {}", id, friendId);
+        userService.addFriends(id, friendId);
     }
 
-    // вспомогательный метод для проверки валидности фильмов
-    private void validateUsers(User user) {
-        if (user.getName() == null || user.getName().isBlank()) {
-            log.info("Имя пользователя отсутствует, применяется Логин");
-            user.setName(user.getLogin());
-        }
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public void removeFriends(@PathVariable Long id, @PathVariable Long friendId) {
+        log.info("Пользователь {} удалил из друзей пользователя {}", id, friendId);
+        userService.removeFriends(id, friendId);
     }
+
 }
