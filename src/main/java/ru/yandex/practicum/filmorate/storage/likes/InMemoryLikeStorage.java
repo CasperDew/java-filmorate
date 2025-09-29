@@ -11,6 +11,7 @@ public class InMemoryLikeStorage implements LikeStorage {
 
     @Override
     public void addLike(Long filmId, Long userId) {
+
         likes.computeIfAbsent(filmId, s -> new HashSet<>()).add(userId);
     }
 
