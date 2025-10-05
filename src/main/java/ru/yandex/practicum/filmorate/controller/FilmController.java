@@ -3,9 +3,12 @@ package ru.yandex.practicum.filmorate.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.FilmsService;
+import ru.yandex.practicum.filmorate.dto.film.FilmDto;
+import ru.yandex.practicum.filmorate.dto.film.NewFilmRequest;
+import ru.yandex.practicum.filmorate.dto.film.UpdateFilmRequest;
+import ru.yandex.practicum.filmorate.service.film.FilmsService;
 
 import java.util.List;
 
@@ -17,31 +20,32 @@ public class FilmController {
     private final FilmsService filmsService;
 
     @GetMapping
-    public List<Film> findAll() {
+    public List<FilmDto> findAll() {
         log.info("Получен список фильмов");
-        return filmsService.getAll();
+        return filmsService.findAll();
     }
 
     @GetMapping("/{id}")
     public void getFilmById(@PathVariable Long id) {
         log.info("Получен фильм с id: {}", id);
-        filmsService.getFilmById(id);
+        filmsService.findById(id);
     }
 
     @GetMapping("/popular")
-    public List<Film> getPopularFilms(@RequestParam(defaultValue = "10", required = false) Integer count) {
+    public List<FilmDto> getPopularFilms(@RequestParam(defaultValue = "10", required = false) Integer count) {
         log.info("Получено {} популярных фильмов (По умолчаную 10 шт)", count);
-        return filmsService.getPopularFilms(count);
+        return filmsService.findFilmsWithTopLikes(count);
     }
 
     @PostMapping
-    public Film addFilm(@Valid @RequestBody Film film) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public FilmDto create(@Valid @RequestBody NewFilmRequest film) {
         log.info("Добавлен фильм: {}", film);
         return filmsService.create(film);
     }
 
     @PutMapping
-    public Film updateFilm(@Valid @RequestBody Film film) {
+    public FilmDto updateFilm(@Valid @RequestBody UpdateFilmRequest film) {
         log.info("Обновлен фильм: {}", film);
         return filmsService.update(film);
     }
@@ -55,7 +59,7 @@ public class FilmController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         log.info("Удален фильм с id: {}", id);
-        filmsService.delete(id);
+        filmsService.deleteById(id);
     }
 
     @DeleteMapping("/{id}/like/{userId}")
