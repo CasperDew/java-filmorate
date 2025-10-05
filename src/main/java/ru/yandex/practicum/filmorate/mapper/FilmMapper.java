@@ -19,7 +19,7 @@ public class FilmMapper {
                 .name(film.getName())
                 .releaseDate(film.getReleaseDate())
                 .duration(film.getDuration())
-                .mpaRating(MPARatingMapper.toMPARatingDto(film.getMpaRating()))
+                .mpa(MPARatingMapper.toMPARatingDto(film.getMpaRating()))
                 .genres(film.getGenres()
                         .stream()
                         .map(genre -> new GenreDto(genre.getId(), genre.getName()))

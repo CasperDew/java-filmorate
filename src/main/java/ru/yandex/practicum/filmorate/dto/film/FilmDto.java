@@ -17,7 +17,7 @@ public class FilmDto {
     private String description;
     private LocalDate releaseDate;
     private Integer duration;
-    private MPARatingDto mpaRating;
+    private MPARatingDto mpa;
 
     @Singular
     private List<GenreDto> genres;

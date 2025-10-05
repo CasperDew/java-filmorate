@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.dto.film.FilmDto;
 import ru.yandex.practicum.filmorate.dto.film.NewFilmRequest;
@@ -16,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/films")
 @RequiredArgsConstructor
+@Validated
 public class FilmController {
     private final FilmsService filmsService;
 
@@ -39,12 +41,14 @@ public class FilmController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Validated
     public FilmDto create(@Valid @RequestBody NewFilmRequest film) {
         log.info("Добавлен фильм: {}", film);
         return filmsService.create(film);
     }
 
     @PutMapping
+    @Validated
     public FilmDto updateFilm(@Valid @RequestBody UpdateFilmRequest film) {
         log.info("Обновлен фильм: {}", film);
         return filmsService.update(film);

@@ -10,10 +10,10 @@ public class MPARatingMapper {
         return new MPARatingDto(mpaRating.getId(), mpaRating.getName());
     }
 
-    public MPARating toMPARating(MPARatingDto mpaRatingDto) {
+    public MPARating toMPARating(MPARatingDto mpa) {
         return MPARating.builder()
-                .id(mpaRatingDto.id())
-                .name(mpaRatingDto.name())
+                .id(mpa.id())
+                .name(mpa.name())
                 .build();
     }
 }
