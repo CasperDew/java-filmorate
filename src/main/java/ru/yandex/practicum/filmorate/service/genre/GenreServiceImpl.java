@@ -25,7 +25,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public GenreDto findById(Long id) {
+    public GenreDto findById(long id) {
         return genreRepository.findById(id)
                 .map(GenreMapper::toGenreDto)
                 .orElseThrow(NotFoundException.supplier("Жанр с id " + id + " не найден"));

@@ -9,7 +9,7 @@ import java.util.List;
 public interface FilmsService {
     List<FilmDto> findAll();
 
-    FilmDto findById(Long id);
+    FilmDto findById(long id);
 
     FilmDto create(NewFilmRequest request);
 

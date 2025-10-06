@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface FilmRepository {
     List<Film> findAll();
 
-    Optional<Film> findById(Long id);
+    Optional<Film> findById(long id);
 
     Film save(Film film);
 

@@ -41,7 +41,7 @@ public class FilmsServiceImpl implements FilmsService {
     }
 
     @Override
-    public FilmDto findById(Long id) {
+    public FilmDto findById(long id) {
         return filmRepository.findById(id)
                 .map(FilmMapper::toFilmDto)
                 .orElseThrow(NotFoundException.supplier("Фильм с id " + id + " не найден"));

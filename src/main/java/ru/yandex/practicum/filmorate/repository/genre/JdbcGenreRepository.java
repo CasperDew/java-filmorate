@@ -23,7 +23,7 @@ public class JdbcGenreRepository implements GenreRepository {
     }
 
     @Override
-    public Optional<Genre> findById(Long id) {
+    public Optional<Genre> findById(long id) {
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("id", id);
 

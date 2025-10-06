@@ -24,7 +24,7 @@ public class JdbcFilmRepository implements FilmRepository {
     private final ResultSetExtractor<List<Film>> filmResultSetExtractor;
 
     @Override
-    public Optional<Film> findById(Long id) {
+    public Optional<Film> findById(long id) {
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("id", id);
 
